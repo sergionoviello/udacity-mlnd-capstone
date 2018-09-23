@@ -4,3 +4,6 @@ data
 notebooks
 .ipynb_checkpoints
 .DS_Store
+*.h5
+best
+*.csv
