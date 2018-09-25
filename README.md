@@ -3,7 +3,21 @@
 
 Sergio Noviello
 
-September 11th, 2018
+September 25th, 2018
+
+
+### Installation 
+
+The best way is to run the jupyter notebook with all the requirements installed is to use Docker. 
+In order to build the image please run: 
+```
+docker build -t snov-capstone .
+```
+
+and to run the container: 
+```
+docker run --rm -v $(pwd):/app -v $(pwd)/data:/app/data -it -p 8888:8888 snov-capstone
+```
 
 This project requires the train and test dataset available
 for download on Kaggle.com

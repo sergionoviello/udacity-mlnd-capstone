@@ -1,6 +1,9 @@
 FROM gaarv/jupyter-keras
 
+USER root
 # update pip
+RUN apt-get update && apt-get install -y graphviz
+
 ADD requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 

@@ -7,3 +7,4 @@ scikit-learn
 numpy
 scipy
 piexif
+h5py
