@@ -11775,27 +11775,18 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Machine-Learning-Engineer-Nanodegree">Machine Learning Engineer Nanodegree<a class="anchor-link" href="#Machine-Learning-Engineer-Nanodegree">&#182;</a></h1><h2 id="Capstone-Proposal">Capstone Proposal<a class="anchor-link" href="#Capstone-Proposal">&#182;</a></h2><p>Sergio Noviello
-September 25th, 2018</p>
-<h2 id="Definition">Definition<a class="anchor-link" href="#Definition">&#182;</a></h2><p>Cervical cancer is a cause of death in women worldwide. In females, it is the 14th most common cancer. The mortality rates were drastically reduced with the introduction of the smear test. However, it is still important for doctors to visually review cervical images in order to correctly classify the cervix type. An incorrect classification will result in a treatment that will be ineffective and will also be very expensive.</p>
+<h1 id="Machine-Learning-Engineer-Nanodegree">Machine Learning Engineer Nanodegree<a class="anchor-link" href="#Machine-Learning-Engineer-Nanodegree">&#182;</a></h1><h2 id="Capstone-Project">Capstone Project<a class="anchor-link" href="#Capstone-Project">&#182;</a></h2><p>Sergio Noviello
+September 27th, 2018</p>
+<h2 id="I.-Definition">I. Definition<a class="anchor-link" href="#I.-Definition">&#182;</a></h2><h3 id="Project-Overview">Project Overview<a class="anchor-link" href="#Project-Overview">&#182;</a></h3><p>Cervical cancer is a cause of death in women worldwide. In females, it is the 14th most common cancer. The mortality rates were drastically reduced with the introduction of the smear test. However, it is still important for doctors to visually review cervical images in order to correctly classify the cervix type. An incorrect classification will result in a treatment that will be ineffective and will also be very expensive.</p>
 <p>This project is based on a competition that was launched on Kaggle a year ago.</p>
-<h2 id="Problem-statement">Problem statement<a class="anchor-link" href="#Problem-statement">&#182;</a></h2><p>The goal of this project is to develop a deep learning model that is capable to classify cervical images and predict the probability of each image to be of type 1, 2 or 3.
+<h3 id="Problem-Statement">Problem Statement<a class="anchor-link" href="#Problem-Statement">&#182;</a></h3><p>The goal of this project is to develop a deep learning model that is capable to classify cervical images and predict the probability of each image to be of type 1, 2 or 3.
 This model will be very helpful for healthcare providers in identifying patients with a cervix of type 2 or type 3 that will lead to further testing.</p>
-<p>The steps required are as follows:</p>
-<ul>
-<li>Download the train and test set from Kaggle.com</li>
-<li>Split the training set into train and validation set</li>
-<li>Convert images into multi-dimensional arrays</li>
-<li>Augment data by flipping, rotating and changing the offset of the images in the training set</li>
-<li>Build a deep learning model using a pre-trained model (ResNet50) </li>
-<li>Evaluate the model using the validation set</li>
-<li>Classify the images in the test set</li>
-</ul>
-<h2 id="Metrics">Metrics<a class="anchor-link" href="#Metrics">&#182;</a></h2><p>I have used the multi-class logarithmic loss as evaluation metric. For each image, a set of predicted probabilities (one for every class) needs to be calculated. The formula is shown in Figure 1:</p>
+<h3 id="Metrics">Metrics<a class="anchor-link" href="#Metrics">&#182;</a></h3><p>I have used the multi-class logarithmic loss as evaluation metric. The reason behind this choice is that log loss increases as the predicted probability diverges from the actual label. Compared to accuracy, where we count the number of predictions equal to the actual values, log loss takes into account how much the predictions vary from the actual value.</p>
+<p>For each image, a set of predicted probabilities (one for every class) needs to be calculated. The formula is shown in Figure 1:</p>
 <p><strong>Fig.1</strong>
 <img src="notes/multi_log_loss.png" alt="Fig.1"></p>
 <p>N is the number of images in the test set, M is the number of categories, log is the natural logarithm, (y_{ij}) is 1 if observation (i) belongs to class (j) and 0 otherwise, and pij is the predicted probability that observation i belongs to class j.</p>
-<h2 id="Exploratory-Data-Analysis">Exploratory Data Analysis<a class="anchor-link" href="#Exploratory-Data-Analysis">&#182;</a></h2><h4 id="number-of-images-in-the-whole-dataset">number of images in the whole dataset<a class="anchor-link" href="#number-of-images-in-the-whole-dataset">&#182;</a></h4><p>The training set consists of 8218 images, divided in 3 classes as shown below. 
+<h2 id="II.-Analysis">II. Analysis<a class="anchor-link" href="#II.-Analysis">&#182;</a></h2><h3 id="Data-Exploration">Data Exploration<a class="anchor-link" href="#Data-Exploration">&#182;</a></h3><h4 id="number-of-images-in-the-whole-dataset">number of images in the whole dataset<a class="anchor-link" href="#number-of-images-in-the-whole-dataset">&#182;</a></h4><p>The training set consists of 8218 images, divided in 3 classes as shown below. 
 53% of the images are in type_2, 29.5% from type_2 and 17.5% from type_1 (Figure 2)</p>
 <table>
 <thead><tr>
@@ -11828,7 +11819,7 @@ This model will be very helpful for healthcare providers in identifying patients
 </table>
 <p><strong>Fig.2</strong>
 <img src="notes/eda1.png" alt="Fig.2"></p>
-<h4 id="image-sizes-in-the-train-set">image sizes in the train set<a class="anchor-link" href="#image-sizes-in-the-train-set">&#182;</a></h4><p>There are 8 types of image size, the majority are 4128x3096 (Figure 3)</p>
+<h3 id="Exploratory-Visualization">Exploratory Visualization<a class="anchor-link" href="#Exploratory-Visualization">&#182;</a></h3><h4 id="image-sizes-in-the-train-set">image sizes in the train set<a class="anchor-link" href="#image-sizes-in-the-train-set">&#182;</a></h4><p>There are 8 types of image size, the majority are 4128x3096 (Figure 3)</p>
 <p><strong>Fig.3</strong>
 <img src="notes/eda2.png" alt="Fig.3"></p>
 <h4 id="image-sizes-in-the-test-set">image sizes in the test set<a class="anchor-link" href="#image-sizes-in-the-test-set">&#182;</a></h4><p>The test dataset has a similar composition in terms of image sizes compared to the training set (Figure 4)</p>
@@ -11838,7 +11829,16 @@ This model will be very helpful for healthcare providers in identifying patients
 <p>In this project I have used data augmentation to make minor alterations to the existing dataset. Minor changes such as flips or translations or rotations.</p>
 <p><strong>Fig.5</strong>
 <img src="notes/eda4.png" alt="Fig.5"></p>
-<h2 id="CNN-Architecture">CNN Architecture<a class="anchor-link" href="#CNN-Architecture">&#182;</a></h2><h3 id="Benchmark-model">Benchmark model<a class="anchor-link" href="#Benchmark-model">&#182;</a></h3><p>A simple model was created as benchmark. I have used one convolutional layer with 3x3 filters followed by a relu activation layer. Finally I have flattened the layer into a monodimensional vector and added a fully connected layer which is responsible to assign probabilities for each class using the softmax algorithm.</p>
+<h3 id="Algorithms-and-Techniques">Algorithms and Techniques<a class="anchor-link" href="#Algorithms-and-Techniques">&#182;</a></h3><p>For this project I have built a neural network using a library called Keras.</p>
+<p>Instead of building the model from scratch, in this project I have decided to use a technique called <em>transfer learning</em> which consists in using the weights of a pre-trained model as input of another model.</p>
+<p>The pre-trained model I have chosen is <strong>ResNet50</strong>.</p>
+<p>ResNet50 proved to be very performant in many classification competitions. The problem is trying to solve is that networks that are very deep can results in a degrading performance. This problem is known as vanishing gradient problem.</p>
+<p>During the process of back propagation gradients of loss, with respect to the weights, are calculated, but the gradients tends to get smaller and smaller as we keep on moving backward in the network. This means that the neurons in the earlier layers learn very slowly as compared to the neurons in the later layers. The early layers are important because they represent the building blocks and they can really effect the accuracy of the next layers.</p>
+<p>ResNet is based on the idea of residual learning. Compared to other networks where an output of a layer is passed to the next layer, ResNet also adds up the outputs of layer 1 to the outputs of layer 2.</p>
+<p>This is denoted with H(x) = F(x)+x, where F(x) and x represents the stacked non-linear layers and the identity function(input=output) respectively.</p>
+<p>ResNet50 is trained on the Imagenet dataset. Imagenet is a database of about 1.5 million images each containing multiple labelled objects. This technique has been proved to be effective because the lower layers of these pre-trained models already contain many generic features such edge recognition and color detectors, features that are common in different datasets.</p>
+<p>A visualization of this model is shown in the Appendix section below.</p>
+<h3 id="Benchmark">Benchmark<a class="anchor-link" href="#Benchmark">&#182;</a></h3><p>A simple model was created as benchmark. I have used one convolutional layer with 3x3 filters followed by a relu activation layer. Finally I have flattened the layer into a monodimensional vector and added a fully connected layer which is responsible to assign probabilities for each class using the softmax algorithm.</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_model</span><span class="p">():</span>    
     <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
     <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">CHANNELS</span><span class="p">)))</span>
@@ -11850,54 +11850,9 @@ This model will be very helpful for healthcare providers in identifying patients
 </pre></div>
 <p><strong>Fig.6</strong>
 <img src="notes/benchmark_model.png" alt="Fig.6"></p>
-<h3 id="Evaluate-benchmark-model">Evaluate benchmark model<a class="anchor-link" href="#Evaluate-benchmark-model">&#182;</a></h3><p>After training this simple model I have then evaluated the total loss against the validation set. 
-The loss was calculated using the multi-class logloss function</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">logloss_mc</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_prob</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Multiclass logloss</span>
-<span class="sd">    This function is not officially provided by Kaggle, so there is no</span>
-<span class="sd">    guarantee for its correctness.</span>
-<span class="sd">    https://github.com/ottogroup/kaggle/blob/master/benchmark.py</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">y_prob</span> <span class="o">=</span> <span class="n">y_prob</span> <span class="o">/</span> <span class="n">y_prob</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">y_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">y_prob</span><span class="p">)</span>
-    <span class="n">y_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">y_prob</span><span class="p">)</span>
-
-    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y_prob</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_true</span><span class="p">)]</span>
-    <span class="n">ll</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">ll</span>
-</pre></div>
-<p>The total loss was: <strong>11.512925148010254</strong></p>
-<h3 id="Tuning-the-model">Tuning the model<a class="anchor-link" href="#Tuning-the-model">&#182;</a></h3><p>I have added enhancements to the benchmark model gradually and I have calculated the total loss after each step to see if they would improve the score.</p>
-<p>The first improvement was to use a technique called 'transfer learning'. Instead of building the model from scratch I have used the weights of a pre-trained model called ResNet50 that is included in the Keras library.</p>
-<p>The model is trained on the Imagenet dataset. Imagenet is a database of about 1.5 million images each containing multiple labelled objects. This technique has been proved to be effective because the lower layers of these pre-trained models already contain many generic features such edge recognition and color detectors, features that are common in different datasets.</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_model</span><span class="p">():</span>
-    <span class="n">base_model</span> <span class="o">=</span> <span class="n">ResNet50</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
-                          <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">,</span> 
-                          <span class="n">input_tensor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                          <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">CHANNELS</span><span class="p">))</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">Flatten</span><span class="p">()(</span><span class="n">base_model</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">model</span>
-</pre></div>
-<p>The architecture of the model is quite complex and illustrated in Figure 7.</p>
-<p><strong>Fig.7</strong>
-<img src="notes/final_model.png" alt="Fig.7"></p>
-<h4 id="Pre-processing-and-data-augmentation">Pre-processing and data augmentation<a class="anchor-link" href="#Pre-processing-and-data-augmentation">&#182;</a></h4><p>In this step I have split the dataset into training (80%) and validation set (20%). The reason for this, is that it is considered good practice to evaluate a model on data that is different to the data used in the training process.</p>
+<h2 id="III.-Methodology">III. Methodology<a class="anchor-link" href="#III.-Methodology">&#182;</a></h2><h3 id="Data-Preprocessing">Data Preprocessing<a class="anchor-link" href="#Data-Preprocessing">&#182;</a></h3><p>In this step I have split the dataset into training (80%) and validation set (20%). The reason for this, is that it is considered good practice to evaluate a model on data that is different to the data used in the training process.</p>
 <p>The images were resized to 200x200 using the library <strong>opencv</strong> and converted to numpy arrays. Considering the size of these multi-dimensional arrays is not efficient to store them in memory, therefore I have used python generators. 
 Generators are functions that behave like iterators, object that can be iterated upon. The benefit is the lazy evaluation, iterators don’t compute the value of each item when instantiated. They only compute it when you ask for it.</p>
-<div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">))</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
-<span class="n">X</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">image</span>
-<span class="n">class_index</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">image_class</span><span class="p">)</span>
-<span class="n">Y</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="n">class_index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">batch_size</span><span class="p">:</span>
-    <span class="k">yield</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
-</pre></div>
 <p>Another important aspect when training a neural network is to standardize the data to have zero mean and unit variance. 
 During the training of a neural network the initial inputs are multiplied by the weights and added to the biases.
 Some parameters are shared in a neural network and, if they are not scaled and in the same range, for some part of the image a weight will appear big and to another it will be too small.</p>
@@ -11929,6 +11884,48 @@ Some parameters are shared in a neural network and, if they are not scaled and i
 </tr>
 </tbody>
 </table>
+<h3 id="Implementation">Implementation<a class="anchor-link" href="#Implementation">&#182;</a></h3><p>The implementation of this project can be divided in the following tasks:</p>
+<ol>
+<li>Download the train and test set from Kaggle.com</li>
+<li>Split the training set into train and validation set</li>
+<li>Convert images into multi-dimensional arrays</li>
+<li>Augment data by flipping, rotating and changing the offset of the images in the training set</li>
+<li>Build a deep learning model using a pre-trained model (ResNet50) </li>
+<li>Train the model</li>
+<li>Evaluate the model using the validation set</li>
+<li>Classify the images in the test set</li>
+</ol>
+<p><strong>1. Download the train and test set from Kaggle.com</strong>
+For this task I have downloaded the datasets from the website Kaggle.com (links are in the README file). 
+The training dataset consisted in two parts: base and additional. The base dataset contains 1484 images, which is not ideal for an image classification problem. I have decided to add the additional data using a simple python function:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">move_files</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">):</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">src_dir</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">dest_dir</span><span class="p">)</span>
+
+
+<span class="n">move_files</span><span class="p">(</span><span class="s1">&#39;data/additional_Type_1_v2&#39;</span><span class="p">,</span> <span class="s1">&#39;data/train/Type_1&#39;</span><span class="p">)</span>
+<span class="n">move_files</span><span class="p">(</span><span class="s1">&#39;data/additional_Type_2_v2&#39;</span><span class="p">,</span> <span class="s1">&#39;data/train/Type_2&#39;</span><span class="p">)</span>
+<span class="n">move_files</span><span class="p">(</span><span class="s1">&#39;data/additional_Type_3_v2&#39;</span><span class="p">,</span> <span class="s1">&#39;data/train/Type_3&#39;</span><span class="p">)</span>
+</pre></div>
+<p><strong>2. Split the training set into train and validation set</strong></p>
+<p>For this task I have decided to split the training and validation set into separate folders because the library Keras relies on a specific directory structure. I have used a python function that I found on github (link in the reference section below)</p>
+<p><strong>3. Convert images into multi-dimensional arrays</strong></p>
+<p>As shown in the exploratory data analysis images had different dimensions. I have decided to resize them to 200x200. 
+Resize an image mean changing the width and height of the image in terms of pixels. 
+I have used opencv, a python library that allows you to read images from file, resize them and convert them into multi dimensional arrays.</p>
+<div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">))</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+<span class="n">X</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">image</span>
+<span class="n">class_index</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">image_class</span><span class="p">)</span>
+<span class="n">Y</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="n">class_index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">if</span> <span class="n">cnt</span> <span class="o">==</span> <span class="n">batch_size</span><span class="p">:</span>
+    <span class="k">yield</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+<p><strong>4. Augment data by flipping, rotating and changing the offset of the images in the training set</strong></p>
+<p>For this step I used the ImageDataGenerator class from Keras. It allows to specify parameters like the rotation angle, the shift of the horizontal and vertical offset, the zoom level and many others. The complete list of parameters is available in the Keras documentation (link in the reference section below).</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_data_generators</span><span class="p">(</span><span class="n">validation_set</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span> 
     <span class="n">data_generator</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">(</span><span class="n">rescale</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mf">255.</span><span class="p">,</span> 
                                         <span class="n">rotation_range</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> 
@@ -11945,12 +11942,8 @@ Some parameters are shared in a neural network and, if they are not scaled and i
                                               <span class="n">class_mode</span><span class="o">=</span><span class="s1">&#39;categorical&#39;</span><span class="p">,</span> 
                                               <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">)</span>
 </pre></div>
-<h3 id="Training-the-model">Training the model<a class="anchor-link" href="#Training-the-model">&#182;</a></h3><p>During the training of this model I have noticed a gap between train and validation loss which is usually an indication of overfitting (Figure 8).</p>
-<p><strong>Fig.8</strong>
-<img src="notes/overfitting.png" alt="Fig.8"></p>
-<h4 id="Reduce-overfitting">Reduce overfitting<a class="anchor-link" href="#Reduce-overfitting">&#182;</a></h4><p>I have decided to add to my model a fully connected layer followed by a dropout layer. Dropout is a regularization technique for reducing overfitting.</p>
-<p>During training some nodes, chosen with 1-p probability, are left out the network. 
-This helps preventing overfitting because it adds a penalty to the loss function so that it does not learn interdependent set of features weights.</p>
+<p><strong>5. Build a deep learning model using a pre-trained model (ResNet50)</strong></p>
+<p>In this step I have created a method that builds the ResNet model using the class provided by Keras and I have then passed the output of this model to a second model</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_model</span><span class="p">():</span>
     <span class="n">base_model</span> <span class="o">=</span> <span class="n">ResNet50</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
                           <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">,</span> 
@@ -11965,6 +11958,45 @@ This helps preventing overfitting because it adds a penalty to the loss function
 
     <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+<p><strong>6. Train the model</strong>
+This step consisted in training the model using the method <strong>fit_generator</strong> from Keras. In order to evaluate the performance during the training I have used the class <strong>ModelCheckpoint</strong> that allows you to save evaluate the accuracy and loss at the end of each epoch and save the model if improved.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_generator</span><span class="p">,</span> <span class="n">validation_generator</span><span class="p">,</span> <span class="n">step_train</span><span class="p">,</span> <span class="n">step_valid</span><span class="p">):</span>
+    <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">SAVED_MODEL</span><span class="p">,</span>  
+                             <span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span>
+                             <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                             <span class="n">save_best_only</span><span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+                             <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span> 
+
+
+    <span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_generator</span><span class="p">(</span>
+            <span class="n">train_generator</span><span class="p">,</span>
+            <span class="n">steps_per_epoch</span><span class="o">=</span><span class="n">step_train</span><span class="p">,</span>
+            <span class="n">epochs</span><span class="o">=</span><span class="n">NUM_EPOCH</span><span class="p">,</span>
+            <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">checkpoint</span><span class="p">],</span>
+            <span class="n">validation_data</span><span class="o">=</span><span class="n">validation_generator</span><span class="p">,</span>
+            <span class="n">validation_steps</span><span class="o">=</span><span class="n">step_valid</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">SAVED_MODEL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">history</span>
+</pre></div>
+<p><strong>7. Evaluate the model using the validation set</strong>
+In this step I have iterated through the images in the validation set and I have calculated the log loss for each batch.</p>
+<div class="highlight"><pre><span></span><span class="n">Y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">logloss_mc</span><span class="p">(</span><span class="n">Y_true</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">),</span> <span class="n">Y_pred</span><span class="p">)</span>
+</pre></div>
+<p><strong>8. Classify the images in the test set</strong>
+The last task was to use the trained model to make predictions on the test set and store the results in a pandas dataframe. The dataframe will have the name of the image and the probabilty for each class (type1, type2, type3)</p>
+<div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+<h3 id="Refinement">Refinement<a class="anchor-link" href="#Refinement">&#182;</a></h3><p>During the training of this model I have noticed a gap between train and validation loss which is usually an indication of overfitting (Figure 8).</p>
+<p><strong>Fig.8</strong>
+<img src="notes/overfitting.png" alt="Fig.8"></p>
+<p>I have decided to add to my model a fully connected layer followed by a dropout layer. Dropout is a regularization technique for reducing overfitting.</p>
+<p>During training some nodes, chosen with 1-p probability, are left out the network. 
+This helps preventing overfitting because it adds a penalty to the loss function so that it does not learn interdependent set of features weights. 
+Keras allows to add dropout layers easily</p>
+<div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 <h4 id="Optimizers-and-learning-rate">Optimizers and learning rate<a class="anchor-link" href="#Optimizers-and-learning-rate">&#182;</a></h4><p>When training a neural network the learning rate can be fixed or it can be reduced as the training progresses. 
 For this I have chosen an adaptive learning rate method called <strong>Adam</strong>. The name is derived from <em>adaptive moment estimation</em>.</p>
@@ -12010,17 +12042,40 @@ For this I have chosen an adaptive learning rate method called <strong>Adam</str
 Dividing the number of images in the training set by the batch size will give us the number of interations needed to completed one epoch. One epoch is complete when the entire dataset is passed forward and backward through the network.</p>
 <p>For my model I have chosen a batch size of 32. I have tried a higher batch size but I noticed that it was slightly overfitting the data.</p>
 <p>For the number of epochs I started with 30 and I used the class ModelCheckpoint from Keras to check at the end of each epoch if the validation loss was improving. I have noticed that after 5 epochs the validation loss did not improve, therefore I have decided to set the number of epochs to five.</p>
-<p>I have trained the model on the cloud using an Amazon EC2 instance with GPU for quicker computational power. 
-The training process took nearly 5 hours.</p>
-<p>Figure 9 shows a visualization of the train and validation loss during the training of the model.</p>
-<p><strong>Fig.9</strong>
-<img src="notes/training.png" alt="Fig.9"></p>
-<h3 id="Conclusions">Conclusions<a class="anchor-link" href="#Conclusions">&#182;</a></h3><p>The total loss of the final model against the validation set is <strong>1.32852661209</strong>.</p>
-<p>I have also used the model to make predictions against the test set and submitted the predictions to Kaggle.com
-Figure 10 shows a score of <strong>1.00197</strong> which would have resulted in position 170 on the private leaderboard.</p>
+<h2 id="IV.-Results">IV. Results<a class="anchor-link" href="#IV.-Results">&#182;</a></h2><h3 id="Model-Evaluation-and-Validation">Model Evaluation and Validation<a class="anchor-link" href="#Model-Evaluation-and-Validation">&#182;</a></h3><p>In order to validate the robustness of the model I have used the model to make predictions against the test set and submitted the predictions to Kaggle.com. Predictions were also calculated on another test set published during the seconda stage of the competition to make sure the model generalizes well to unseen data.</p>
+<p>Figure 10 shows a score of <strong>1.00197</strong> which would have resulted in position 170 on the private leaderboard.</p>
 <p><strong>Fig.10</strong>
 <img src="notes/lboard2.png" alt="Fig.10"></p>
-<h3 id="Improvements">Improvements<a class="anchor-link" href="#Improvements">&#182;</a></h3><p>In order to achieve better results the model should be trained for longer than 5 epochs on a more powerful hardware.</p>
+<h3 id="Justification">Justification<a class="anchor-link" href="#Justification">&#182;</a></h3><p>The comparison between benchmark and final model in terms of log loss shows a significant improvement. 
+The benchmark model was also less robust. I have noticed different results with different split of the training and validation set, showing that the model was not generalizing and overfitting the training data.</p>
+<table>
+<thead><tr>
+<th>Model</th>
+<th>log_loss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>benchmark</td>
+<td>11.51</td>
+</tr>
+<tr>
+<td>final</td>
+<td>1.33</td>
+</tr>
+</tbody>
+</table>
+<h2 id="V.-Conclusion">V. Conclusion<a class="anchor-link" href="#V.-Conclusion">&#182;</a></h2><h3 id="Free-Form-Visualization">Free-Form Visualization<a class="anchor-link" href="#Free-Form-Visualization">&#182;</a></h3><p>Figure 11 shows an actual type 3 cervix and figure 12 shows an image classified as type 3 by the model</p>
+<p><strong>Figure. 11 (actual type 3 cervix)</strong> 
+<img src="notes/1259.jpg" alt="Fig.11"></p>
+<p><strong>Figure. 12 (predicted type 3 cervix)</strong>
+<img src="notes/10006.jpg" alt="Fig.12"></p>
+<h3 id="Reflection">Reflection<a class="anchor-link" href="#Reflection">&#182;</a></h3><p>The creation of a benchmark model was pretty straight forward. The most challenging part was to optimize the model 
+and make the model more robust. In deep learning there isn't a universal recipe that can be applied to image classification problems, the final results really depend on the type of data you have, but there are certainly guidelines to follow while training the model. Observing the accuracy, in my case the batch loss, during training is important to understand if the learning rate is set correctly. I experienced both cases where the rate was too high resulting in a quick drop in the total loss followed by no improvements or a low learning rate that it requires the model to train for long time in order to see improvements.</p>
+<p>It was also very important for this project the distribution of the data. During few experiments I noticed a big gap between train and validation loss, and I was also getting unexpected results on the test data.</p>
+<p>The assumption is that if the model doesn't have enough data to understand the features of each individual class, the final results will be inaccurate. The model also won't produce consistent results on unseen data.</p>
+<h3 id="Improvement">Improvement<a class="anchor-link" href="#Improvement">&#182;</a></h3><p>One improvement that I can think of is to train the model for longer time. It's probably better to use an instance on Amazon with high computational power and gpu technology.</p>
+<p>Another aspect that can be improved is about image manipulation. Many images in the dataset show areas that don't contain relevant information. A good work in my opinion was done by one of the partecipants on Kaggle: <a href="https://www.kaggle.com/zahaviguy/identifying-the-cervix-region-of-interest">https://www.kaggle.com/zahaviguy/identifying-the-cervix-region-of-interest</a></p>
 <h3 id="References">References<a class="anchor-link" href="#References">&#182;</a></h3><ul>
 <li><a href="https://www.kaggle.com/c/intel-mobileodt-cervical-cancer-screening">kaggle competition</a></li>
 <li><a href="https://kaggle2.blob.core.windows.net/competitions/kaggle/6243/media/Cervix%20types%20clasification.pdf">cervix types classification</a></li>
@@ -12029,6 +12084,8 @@ Figure 10 shows a score of <strong>1.00197</strong> which would have resulted in
 <li><a href="https://github.com/keras-team/keras/issues/5862">split data</a></li>
 <li><a href="https://machinelearningmastery.com">data augmentation</a></li>
 </ul>
+<h3 id="Appendix">Appendix<a class="anchor-link" href="#Appendix">&#182;</a></h3><p>RestNet50 Architecture</p>
+<p><img src="notes/resnet50.png" alt="Fig.7"></p>
 
 </div>
 </div>
