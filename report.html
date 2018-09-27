@@ -11829,15 +11829,21 @@ This model will be very helpful for healthcare providers in identifying patients
 <p>In this project I have used data augmentation to make minor alterations to the existing dataset. Minor changes such as flips or translations or rotations.</p>
 <p><strong>Fig.5</strong>
 <img src="notes/eda4.png" alt="Fig.5"></p>
-<h3 id="Algorithms-and-Techniques">Algorithms and Techniques<a class="anchor-link" href="#Algorithms-and-Techniques">&#182;</a></h3><p>For this project I have built a neural network using a library called Keras.</p>
-<p>Instead of building the model from scratch, in this project I have decided to use a technique called <em>transfer learning</em> which consists in using the weights of a pre-trained model as input of another model.</p>
-<p>The pre-trained model I have chosen is <strong>ResNet50</strong>.</p>
-<p>ResNet50 proved to be very performant in many classification competitions. The problem is trying to solve is that networks that are very deep can results in a degrading performance. This problem is known as vanishing gradient problem.</p>
-<p>During the process of back propagation gradients of loss, with respect to the weights, are calculated, but the gradients tends to get smaller and smaller as we keep on moving backward in the network. This means that the neurons in the earlier layers learn very slowly as compared to the neurons in the later layers. The early layers are important because they represent the building blocks and they can really effect the accuracy of the next layers.</p>
-<p>ResNet is based on the idea of residual learning. Compared to other networks where an output of a layer is passed to the next layer, ResNet also adds up the outputs of layer 1 to the outputs of layer 2.</p>
-<p>This is denoted with H(x) = F(x)+x, where F(x) and x represents the stacked non-linear layers and the identity function(input=output) respectively.</p>
-<p>ResNet50 is trained on the Imagenet dataset. Imagenet is a database of about 1.5 million images each containing multiple labelled objects. This technique has been proved to be effective because the lower layers of these pre-trained models already contain many generic features such edge recognition and color detectors, features that are common in different datasets.</p>
-<p>A visualization of this model is shown in the Appendix section below.</p>
+<h3 id="Algorithms-and-Techniques">Algorithms and Techniques<a class="anchor-link" href="#Algorithms-and-Techniques">&#182;</a></h3><p>For this project I have built a convolutaional neural network (CNN) using a library called Keras.</p>
+<p>Convolutaional neural networks  have been very successful for image classification problems. 
+To explain how a neural network can classify images let's use a simple grey-scale image with dimensions 8x8. 
+This image can be represented as a matrix where each element is the intensity of the grey colour of each pixel.</p>
+<p>The image is passed through a layer called Convolution layer, a layer responsible to extract features. 
+To detect a feature a filter is applied to the image. This filter is also represented as matrix and it has usually smaller dimensions, for example 3x3. 
+The filter slides over the original image by 1 pixel (also called stride) and for every position, it computes element wise multiplication and add the multiplication outputs to get the final value which forms a single element of the output matrix.</p>
+<p>Some filters don't fit the dimentions of the image, this can be solved by dropping the part not fitting or by adding a padding (zero values).</p>
+<p>The result is a feature map that allows to indentify features like edges, shapes, etc.</p>
+<p>After each convolutaional layer, an activation layer is applied. This is very important because it's the layer responsible to activate or not a node of the network in order to be passed to the next layer.</p>
+<p>Other layers can be added to optmize the results. For example the batch normalization layer is used in ResNet50. The purpose is to scale feature. It is important because some feature could vary from 0 to 1 and some from 1 to 1000.</p>
+<p>Another layer used for optimization is a dropout layer. Dropout is a regularization technique for reducing overfitting.</p>
+<p>In order to classify the image, its matrix representation is converted into a one dimensional vector with a fully connected layer. An algorithm is applied to calculate the probability for each class. The most used for multi-category classification, like in this project, is softmax.</p>
+<p>Instead of building the neural network from scratch, in this project I have decided to use a technique called <em>transfer learning</em> which consists in using the weights of a pre-trained model as input of another model.</p>
+<p>The pre-trained model I have chosen is <strong>ResNet50</strong> that was the winner of the ImageNet Large Scale Visual Recognition Competition in 2012.</p>
 <h3 id="Benchmark">Benchmark<a class="anchor-link" href="#Benchmark">&#182;</a></h3><p>A simple model was created as benchmark. I have used one convolutional layer with 3x3 filters followed by a relu activation layer. Finally I have flattened the layer into a monodimensional vector and added a fully connected layer which is responsible to assign probabilities for each class using the softmax algorithm.</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_model</span><span class="p">():</span>    
     <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
@@ -11851,7 +11857,7 @@ This model will be very helpful for healthcare providers in identifying patients
 <p><strong>Fig.6</strong>
 <img src="notes/benchmark_model.png" alt="Fig.6"></p>
 <h2 id="III.-Methodology">III. Methodology<a class="anchor-link" href="#III.-Methodology">&#182;</a></h2><h3 id="Data-Preprocessing">Data Preprocessing<a class="anchor-link" href="#Data-Preprocessing">&#182;</a></h3><p>In this step I have split the dataset into training (80%) and validation set (20%). The reason for this, is that it is considered good practice to evaluate a model on data that is different to the data used in the training process.</p>
-<p>The images were resized to 200x200 using the library <strong>opencv</strong> and converted to numpy arrays. Considering the size of these multi-dimensional arrays is not efficient to store them in memory, therefore I have used python generators. 
+<p>The images were resized to 224x224 using the library <strong>opencv</strong> and converted to numpy arrays. Considering the size of these multi-dimensional arrays is not efficient to store them in memory, therefore I have used python generators. 
 Generators are functions that behave like iterators, object that can be iterated upon. The benefit is the lazy evaluation, iterators don’t compute the value of each item when instantiated. They only compute it when you ask for it.</p>
 <p>Another important aspect when training a neural network is to standardize the data to have zero mean and unit variance. 
 During the training of a neural network the initial inputs are multiplied by the weights and added to the biases.
@@ -11911,7 +11917,7 @@ The training dataset consisted in two parts: base and additional. The base datas
 <p><strong>2. Split the training set into train and validation set</strong></p>
 <p>For this task I have decided to split the training and validation set into separate folders because the library Keras relies on a specific directory structure. I have used a python function that I found on github (link in the reference section below)</p>
 <p><strong>3. Convert images into multi-dimensional arrays</strong></p>
-<p>As shown in the exploratory data analysis images had different dimensions. I have decided to resize them to 200x200. 
+<p>As shown in the exploratory data analysis images had different dimensions. I have decided to resize them to 224x224. 
 Resize an image mean changing the width and height of the image in terms of pixels. 
 I have used opencv, a python library that allows you to read images from file, resize them and convert them into multi dimensional arrays.</p>
 <div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
@@ -11945,15 +11951,16 @@ I have used opencv, a python library that allows you to read images from file, r
 <p><strong>5. Build a deep learning model using a pre-trained model (ResNet50)</strong></p>
 <p>In this step I have created a method that builds the ResNet model using the class provided by Keras and I have then passed the output of this model to a second model</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">build_model</span><span class="p">():</span>
-    <span class="n">base_model</span> <span class="o">=</span> <span class="n">ResNet50</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
-                          <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;imagenet&#39;</span><span class="p">,</span> 
-                          <span class="n">input_tensor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
-                          <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">CHANNELS</span><span class="p">))</span>
-
+    <span class="n">base_model</span> <span class="o">=</span> <span class="n">ResNet50</span><span class="p">(</span><span class="n">include_top</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">input_tensor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">CHANNELS</span><span class="p">))</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">Flatten</span><span class="p">()(</span><span class="n">base_model</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
     <span class="n">output</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
     <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
 
     <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
@@ -12042,40 +12049,201 @@ For this I have chosen an adaptive learning rate method called <strong>Adam</str
 Dividing the number of images in the training set by the batch size will give us the number of interations needed to completed one epoch. One epoch is complete when the entire dataset is passed forward and backward through the network.</p>
 <p>For my model I have chosen a batch size of 32. I have tried a higher batch size but I noticed that it was slightly overfitting the data.</p>
 <p>For the number of epochs I started with 30 and I used the class ModelCheckpoint from Keras to check at the end of each epoch if the validation loss was improving. I have noticed that after 5 epochs the validation loss did not improve, therefore I have decided to set the number of epochs to five.</p>
-<h2 id="IV.-Results">IV. Results<a class="anchor-link" href="#IV.-Results">&#182;</a></h2><h3 id="Model-Evaluation-and-Validation">Model Evaluation and Validation<a class="anchor-link" href="#Model-Evaluation-and-Validation">&#182;</a></h3><p>In order to validate the robustness of the model I have used the model to make predictions against the test set and submitted the predictions to Kaggle.com. Predictions were also calculated on another test set published during the seconda stage of the competition to make sure the model generalizes well to unseen data.</p>
-<p>Figure 10 shows a score of <strong>1.00197</strong> which would have resulted in position 170 on the private leaderboard.</p>
+<h2 id="IV.-Results">IV. Results<a class="anchor-link" href="#IV.-Results">&#182;</a></h2><h3 id="Model-Evaluation-and-Validation">Model Evaluation and Validation<a class="anchor-link" href="#Model-Evaluation-and-Validation">&#182;</a></h3><p>The model I have used for this project is ResNet50.</p>
+<p>ResNet50 proved to be very performant in many classification competitions. The problem is trying to solve is that networks that are very deep can results in a degrading performance. This problem is known as vanishing gradient problem.</p>
+<p>During the process of back propagation gradients of loss, with respect to the weights, are calculated, but the gradients tends to get smaller and smaller as we keep on moving backward in the network. This means that the neurons in the earlier layers learn very slowly as compared to the neurons in the later layers. The early layers are important because they represent the building blocks and they can really effect the accuracy of the next layers.</p>
+<p>ResNet is based on the idea of residual learning. Compared to other networks where an output of a layer is passed to the next layer, ResNet also adds up the outputs of layer 1 to the outputs of layer 2.</p>
+<p>This is denoted with H(x) = F(x)+x, where F(x) and x represents the stacked non-linear layers and the identity function(input=output) respectively.</p>
+<p>ResNet50 is trained on the Imagenet dataset. Imagenet is a database of about 1.5 million images each containing multiple labelled objects. This technique has been proved to be effective because the lower layers of these pre-trained models already contain many generic features such edge recognition and color detectors, features that are common in different datasets.</p>
+<p>A visualization of this model is shown in the Appendix section below.</p>
+<p>I have trained the model using a <strong>batch size of 32</strong> and a <strong>number of epochs equal to 5</strong>. 
+With regards to the optimizer algorithm I have got the best results with the Adam algorithm with a <strong>learning rate of 0.01</strong>. For the other parameters I have used the default values:</p>
+<table>
+<thead><tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>beta_1</td>
+<td>0.9</td>
+<td>the exponential decay rate for the first moment estimates</td>
+</tr>
+<tr>
+<td>beta_2</td>
+<td>0.9999</td>
+<td>the exponential decay rate for the second-moment estimates</td>
+</tr>
+<tr>
+<td>epsilon</td>
+<td>1e-08</td>
+<td>a small number to prevent any division by zero</td>
+</tr>
+</tbody>
+</table>
+<p>In order to validate the robustness of the model I have used the model to make predictions against the test set and submitted the predictions to Kaggle.com. Predictions were also calculated on another test set published during the seconda stage of the competition to make sure the model generalizes well to unseen data.</p>
+<p>Figure 10 shows a score of <strong>0.98441</strong> . By looking at the leaderboard on Kaggle.com 48% of the candidates have achieved better results than mine.</p>
 <p><strong>Fig.10</strong>
-<img src="notes/lboard2.png" alt="Fig.10"></p>
+<img src="notes/lboard4.png" alt="Fig.10"></p>
 <h3 id="Justification">Justification<a class="anchor-link" href="#Justification">&#182;</a></h3><p>The comparison between benchmark and final model in terms of log loss shows a significant improvement. 
 The benchmark model was also less robust. I have noticed different results with different split of the training and validation set, showing that the model was not generalizing and overfitting the training data.</p>
 <table>
 <thead><tr>
 <th>Model</th>
-<th>log_loss</th>
+<th>log_loss on the test set</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>benchmark</td>
-<td>11.51</td>
+<td>16.66</td>
 </tr>
 <tr>
 <td>final</td>
-<td>1.33</td>
+<td>0.98441</td>
 </tr>
 </tbody>
 </table>
-<h2 id="V.-Conclusion">V. Conclusion<a class="anchor-link" href="#V.-Conclusion">&#182;</a></h2><h3 id="Free-Form-Visualization">Free-Form Visualization<a class="anchor-link" href="#Free-Form-Visualization">&#182;</a></h3><p>Figure 11 shows an actual type 3 cervix and figure 12 shows an image classified as type 3 by the model</p>
-<p><strong>Figure. 11 (actual type 3 cervix)</strong> 
-<img src="notes/1259.jpg" alt="Fig.11"></p>
-<p><strong>Figure. 12 (predicted type 3 cervix)</strong>
-<img src="notes/10006.jpg" alt="Fig.12"></p>
-<h3 id="Reflection">Reflection<a class="anchor-link" href="#Reflection">&#182;</a></h3><p>The creation of a benchmark model was pretty straight forward. The most challenging part was to optimize the model 
+<p>Figure 11a shows the training and validation loss during the training of the benchmark model. The validation loss appears to be very flat.</p>
+<p><strong>Fig. 11a</strong>
+<img src="notes/val_loss_benchmark.png" alt="Fig.11a"></p>
+<p>Figure 11b shows the training and validation loss during the training of the final model.<br>
+The validation loss appears to decrease gradually and it's close the the training loss.</p>
+<p><strong>Fig. 11b</strong>
+<img src="notes/val_loss_final_model.png" alt="Fig.11b"></p>
+<h2 id="V.-Conclusion">V. Conclusion<a class="anchor-link" href="#V.-Conclusion">&#182;</a></h2><h3 id="Free-Form-Visualization">Free-Form Visualization<a class="anchor-link" href="#Free-Form-Visualization">&#182;</a></h3><p>Below are examples of images correctly classified with the probabilities predicted by the model.</p>
+<h4 id="Figure-12-shows-a-type-1-correctly-classified.">Figure 12 shows a type 1 correctly classified.<a class="anchor-link" href="#Figure-12-shows-a-type-1-correctly-classified.">&#182;</a></h4><table>
+<thead><tr>
+<th>Image</th>
+<th>Type1</th>
+<th>Type2</th>
+<th>Type3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1437.jpg</td>
+<td>0.634309</td>
+<td>0.327495</td>
+<td>0.0381958</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fig. 12</strong> 
+<img src="notes/1437.jpg" alt="Fig.12"></p>
+<h4 id="Figure-13-shows-a-type-2-correctly-classified">Figure 13 shows a type 2 correctly classified<a class="anchor-link" href="#Figure-13-shows-a-type-2-correctly-classified">&#182;</a></h4><table>
+<thead><tr>
+<th>Image</th>
+<th>Type1</th>
+<th>Type2</th>
+<th>Type3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1348.jpg</td>
+<td>0.0492196</td>
+<td>0.464246</td>
+<td>0.486534</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fig. 13</strong>
+<img src="notes/1348.jpg" alt="Fig.13"></p>
+<h4 id="Figure-14-shows-a-type-3-correctly-classified">Figure 14 shows a type 3 correctly classified<a class="anchor-link" href="#Figure-14-shows-a-type-3-correctly-classified">&#182;</a></h4><table>
+<thead><tr>
+<th>Image</th>
+<th>Type1</th>
+<th>Type2</th>
+<th>Type3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1133.jpg</td>
+<td>0.0492196</td>
+<td>0.464246</td>
+<td>0.486534</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fig. 14</strong>
+<img src="notes/1133.jpg" alt="Fig.14"></p>
+<p>These are example of mis-classfied images</p>
+<h4 id="Figure-15-shows-a-type-1-incorrectly-classified-(the-true-label-is-Type-2)">Figure 15 shows a type 1 incorrectly classified (the true label is Type 2)<a class="anchor-link" href="#Figure-15-shows-a-type-1-incorrectly-classified-(the-true-label-is-Type-2)">&#182;</a></h4><table>
+<thead><tr>
+<th>Image</th>
+<th>Type1</th>
+<th>Type2</th>
+<th>Type3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1159.jpg</td>
+<td>0.473857</td>
+<td>0.455143</td>
+<td>0.0709998</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fig. 15</strong>
+<img src="notes/1159.jpg" alt="Fig.15"></p>
+<h4 id="Figure-16-shows-a-type-2-incorrectly-classified-(the-true-label-is-Type-1)">Figure 16 shows a type 2 incorrectly classified (the true label is Type 1)<a class="anchor-link" href="#Figure-16-shows-a-type-2-incorrectly-classified-(the-true-label-is-Type-1)">&#182;</a></h4><table>
+<thead><tr>
+<th>Image</th>
+<th>Type1</th>
+<th>Type2</th>
+<th>Type3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1019.jpg</td>
+<td>0.169225</td>
+<td>0.538158</td>
+<td>0.292616</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fig. 16</strong>
+<img src="notes/1019.jpg" alt="Fig.16"></p>
+<h4 id="Figure-17-shows-a-type-3-incorrectly-classified-(the-true-label-is-Type-2)">Figure 17 shows a type 3 incorrectly classified (the true label is Type 2)<a class="anchor-link" href="#Figure-17-shows-a-type-3-incorrectly-classified-(the-true-label-is-Type-2)">&#182;</a></h4><table>
+<thead><tr>
+<th>Image</th>
+<th>Type1</th>
+<th>Type2</th>
+<th>Type3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>813.jpg</td>
+<td>0.0538823</td>
+<td>0.471399</td>
+<td>0.474719</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fig. 17</strong>
+<img src="notes/813.jpg" alt="Fig.17"></p>
+<h3 id="Reflection">Reflection<a class="anchor-link" href="#Reflection">&#182;</a></h3><p>The goal of this project was to automate the process of classifying cervical images.
+The approach I followed to solve this problem can be summirized as follows:</p>
+<ul>
+<li>use a dataset of correctly labelled images to train the neural network</li>
+<li>reserve part of this labelled images to validate the performance of the model by comparing the true label with the predicted one</li>
+<li>use the log loss metric to define a score and compare it with a simple model used as benchmark </li>
+<li>finally predict the probability of a new image not seen before by the model to be of type 1, 2 or 3. </li>
+<li>validate the robustness of the model by submitting the predicted classes by the model. Kaggle calculates the total loss of this submission and outputs a score that can be compared with the other participants of the competition. </li>
+</ul>
+<p>The creation of a benchmark model was pretty straight forward. The most challenging part was to optimize the model 
 and make the model more robust. In deep learning there isn't a universal recipe that can be applied to image classification problems, the final results really depend on the type of data you have, but there are certainly guidelines to follow while training the model. Observing the accuracy, in my case the batch loss, during training is important to understand if the learning rate is set correctly. I experienced both cases where the rate was too high resulting in a quick drop in the total loss followed by no improvements or a low learning rate that it requires the model to train for long time in order to see improvements.</p>
 <p>It was also very important for this project the distribution of the data. During few experiments I noticed a big gap between train and validation loss, and I was also getting unexpected results on the test data.</p>
 <p>The assumption is that if the model doesn't have enough data to understand the features of each individual class, the final results will be inaccurate. The model also won't produce consistent results on unseen data.</p>
 <h3 id="Improvement">Improvement<a class="anchor-link" href="#Improvement">&#182;</a></h3><p>One improvement that I can think of is to train the model for longer time. It's probably better to use an instance on Amazon with high computational power and gpu technology.</p>
-<p>Another aspect that can be improved is about image manipulation. Many images in the dataset show areas that don't contain relevant information. A good work in my opinion was done by one of the partecipants on Kaggle: <a href="https://www.kaggle.com/zahaviguy/identifying-the-cervix-region-of-interest">https://www.kaggle.com/zahaviguy/identifying-the-cervix-region-of-interest</a></p>
+<p>Another aspect that can be improved is about image manipulation. Many images in the dataset show areas that don't contain relevant information. A good work in my opinion was done by one of the participants on Kaggle: <a href="https://www.kaggle.com/zahaviguy/identifying-the-cervix-region-of-interest">https://www.kaggle.com/zahaviguy/identifying-the-cervix-region-of-interest</a></p>
 <h3 id="References">References<a class="anchor-link" href="#References">&#182;</a></h3><ul>
 <li><a href="https://www.kaggle.com/c/intel-mobileodt-cervical-cancer-screening">kaggle competition</a></li>
 <li><a href="https://kaggle2.blob.core.windows.net/competitions/kaggle/6243/media/Cervix%20types%20clasification.pdf">cervix types classification</a></li>
